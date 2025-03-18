@@ -3,7 +3,7 @@ import pathlib as pl
 import numpy as np
 import pandas as pd
 
-from smc_benchmark._naming import KIT_NAMING, UT_NAMING, KUL_NAMING
+from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UT_NAMING
 from smc_benchmark._utils import decode_filename
 
 # Test configuirations
