@@ -4,7 +4,7 @@ import pytest as pt
 
 testdata = [
     ["kit", pl.Path(r"tests/data/kit")],
-    ["ut", pl.Path(r"tests/data/utw")],
+    ["utw", pl.Path(r"tests/data/utw")],
     ["kul", pl.Path(r"tests/data/kul"),],
 ]
 
