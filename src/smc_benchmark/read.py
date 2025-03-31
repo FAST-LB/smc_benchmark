@@ -3,7 +3,7 @@ import pathlib as pl
 import numpy as np
 import pandas as pd
 
-from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UT_NAMING
+from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UTW_NAMING
 from smc_benchmark._utils import decode_filename
 
 # Test configuirations
@@ -14,7 +14,7 @@ CONFIG4 = "7mm 100x100"
 
 # Name of institution
 KIT = "kit"
-UT = "ut"
+UTW = "ut"
 KUL = "kul"
 
 # Mapping between configuration and number for KIT, UT
@@ -27,7 +27,7 @@ CONFIG_TO_NUMBER_KIT = {
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 
 # File extensions of the data files
-FILE_EXTENSION = {KIT: "*.TXT", UT: "*.csv", KUL: "*.csv"}
+FILE_EXTENSION = {KIT: "*.TXT", UTW: "*.csv", KUL: "*.csv"}
 
 
 def read(institution, folder):
@@ -57,8 +57,8 @@ def read(institution, folder):
         # Read individual experiments
         if institution == KIT:
             pd_data = _read_kit(file)
-        elif institution == UT:
-            pd_data = _read_ut(file)
+        elif institution == UTW:
+            pd_data = _read_utw(file)
         elif institution == KUL:
             pd_data = _read_kul(file)
         else:
@@ -80,9 +80,9 @@ def _read_kit(file):
     return pd.DataFrame(data[list(KIT_NAMING.keys())].T, columns=list(KIT_NAMING.values()))
 
 
-def _read_ut(file):
+def _read_utw(file):
     """Read UT/TPRC data file."""
-    return pd.read_csv(file, sep=",", names=UT_NAMING, skiprows=6, quotechar='"')
+    return pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=6, quotechar='"')
 
 
 def _read_kul(file):

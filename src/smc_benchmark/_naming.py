@@ -10,5 +10,5 @@ VELOCITY = "v"  # velocity
 
 # Column names; used in read functions
 KIT_NAMING = {0: TIME, 2: FORCE, 3: DISPLACEMENT, 4: GAP}
-UT_NAMING = [TIME, DISPLACEMENT, FORCE, "L1", "L2"]  # L(VDT)1 & 2 not used
+UTW_NAMING = [TIME, DISPLACEMENT, FORCE, "L1", "L2"]  # L(VDT)1 & 2 not used
 KUL_NAMING = [TIME, DISPLACEMENT, FORCE]  # [s] , [mm], [kN]
