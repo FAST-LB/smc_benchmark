@@ -14,7 +14,7 @@ CONFIG4 = "7mm 100x100"
 
 # Name of institution
 KIT = "kit"
-UTW = "ut"
+UTW = "utw"
 KUL = "kul"
 
 # Mapping between configuration and number for KIT, UT
