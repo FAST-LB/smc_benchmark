@@ -3,7 +3,7 @@ import pathlib as pl
 import numpy as np
 import pandas as pd
 
-from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UTW_NAMING
+from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UTW_NAMING, JKU_NAMING
 from smc_benchmark._utils import decode_filename
 
 # Test configuirations
@@ -11,11 +11,14 @@ CONFIG1 = "3mm 100x100"
 CONFIG2 = "3mm 50x50"
 CONFIG3 = "5mm 100x100"
 CONFIG4 = "7mm 100x100"
+CONFIG5 = "5mm 50x50"
+CONFIG6 = "7mm 50x50"
 
 # Name of institution
 KIT = "kit"
 UTW = "utw"
 KUL = "kul"
+JKU = "jku"
 
 # Mapping between configuration and number for KIT, UT
 CONFIG_TO_NUMBER_KIT = {
@@ -23,11 +26,13 @@ CONFIG_TO_NUMBER_KIT = {
     CONFIG2: [4, 8, 12, 16, 20, 24],
     CONFIG3: [2, 6, 10, 14, 18, 22],
     CONFIG4: [1, 5, 9, 13, 17, 21],
+    CONFIG5: [2, 6, 10, 14, 18, 22],
+    CONFIG6: [1, 5, 9, 13, 17, 21],
 }
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 
 # File extensions of the data files
-FILE_EXTENSION = {KIT: "*.TXT", UTW: "*.csv", KUL: "*.csv"}
+FILE_EXTENSION = {KIT: "*.TXT", UTW: "*.csv", KUL: "*.csv", JKU: "*.csv"}
 
 
 def read(institution, folder):
@@ -61,6 +66,8 @@ def read(institution, folder):
             pd_data = _read_utw(file)
         elif institution == KUL:
             pd_data = _read_kul(file)
+        elif institution == JKU:
+            pd_data = _read_jku(file)
         else:
             raise ValueError(f"Insitution '{institution}' not found")
 
@@ -90,6 +97,10 @@ def _read_kul(file):
     data = pd.read_csv(file, sep=";", names=KUL_NAMING, skiprows=5, quotechar='"', decimal=",")
     data["F"] *= 1_000  # Convert kN to N
     return data
+
+def _read_jku(file):
+    """Read JKU data file."""
+    return pd.read_csv(file, sep="\t", names=JKU_NAMING, skiprows=5, quotechar='"', encoding="ISO-8859-1")
 
 
 def _read_tum():

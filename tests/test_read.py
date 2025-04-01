@@ -6,6 +6,7 @@ testdata = [
     ["kit", pl.Path(r"tests/data/kit")],
     ["utw", pl.Path(r"tests/data/utw")],
     ["kul", pl.Path(r"tests/data/kul"),],
+    ["jku", pl.Path(r"tests/data/jku"),],
 ]
 
 
