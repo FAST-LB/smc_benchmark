@@ -20,7 +20,7 @@ UTW = "utw"
 KUL = "kul"
 JKU = "jku"
 
-# Mapping between configuration and number for KIT, UT
+# Mapping between configuration and number for KIT, UT, KUL
 CONFIG_TO_NUMBER_KIT = {
     CONFIG1: [3, 7, 11, 15, 19, 23],
     CONFIG2: [4, 8, 12, 16, 20, 24],
@@ -29,7 +29,16 @@ CONFIG_TO_NUMBER_KIT = {
     CONFIG5: [2, 6, 10, 14, 18, 22],
     CONFIG6: [1, 5, 9, 13, 17, 21],
 }
+
+CONFIG_TO_NUMBER_JKU = {
+    CONFIG1: [1, 2, 3, 4, 5, 6],
+    CONFIG2: [7, 8, 9, 10, 11, 12],
+    CONFIG5: [25, 26, 27, 28, 29, 30],
+    CONFIG6: [31, 32, 33, 34, 35, 36],
+}
+
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
+NUMBER_TO_CONFIG_JKU = {v: k for k, values in CONFIG_TO_NUMBER_JKU.items() for v in values}
 
 # File extensions of the data files
 FILE_EXTENSION = {KIT: "*.TXT", UTW: "*.csv", KUL: "*.csv", JKU: "*.csv"}
@@ -74,7 +83,11 @@ def read(institution, folder):
         # Add experiment to all data
         if material not in all_data:
             all_data[material] = {}
-        specification = NUMBER_TO_CONFIG_KIT[int(number)]
+        # Determine the specification based on the institution
+        if institution == JKU:
+            specification = NUMBER_TO_CONFIG_JKU[int(number)]
+        else:
+            specification = NUMBER_TO_CONFIG_KIT[int(number)]
         if specification not in all_data[material]:
             all_data[material][specification] = []
         all_data[material][specification].append(pd_data)
