@@ -201,4 +201,5 @@ def _read_rise(file):
     data[FORCE] *= -1_000.0  # [kN] to [N]
     data[GAP] = 41.10 + (data[DISPLACEMENT] - data[DISPLACEMENT].iloc[0])
     data = data[data[GAP] <= 11].reset_index(drop=True)
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
