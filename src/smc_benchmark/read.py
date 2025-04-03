@@ -3,7 +3,7 @@ import pathlib as pl
 import numpy as np
 import pandas as pd
 
-from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UTW_NAMING, JKU_NAMING
+from smc_benchmark._naming import JKU_NAMING, KIT_NAMING, KUL_NAMING, UTW_NAMING
 from smc_benchmark._utils import decode_filename
 
 # Test configuirations
@@ -26,8 +26,6 @@ CONFIG_TO_NUMBER_KIT = {
     CONFIG2: [4, 8, 12, 16, 20, 24],
     CONFIG3: [2, 6, 10, 14, 18, 22],
     CONFIG4: [1, 5, 9, 13, 17, 21],
-    CONFIG5: [2, 6, 10, 14, 18, 22],
-    CONFIG6: [1, 5, 9, 13, 17, 21],
 }
 
 CONFIG_TO_NUMBER_JKU = {
@@ -111,9 +109,12 @@ def _read_kul(file):
     data["F"] *= 1_000  # Convert kN to N
     return data
 
+
 def _read_jku(file):
     """Read JKU data file."""
-    return pd.read_csv(file, sep="\t", names=JKU_NAMING, skiprows=5, quotechar='"', encoding="ISO-8859-1")
+    return pd.read_csv(
+        file, sep="\t", names=JKU_NAMING, skiprows=5, quotechar='"', encoding="ISO-8859-1"
+    )
 
 
 def _read_tum():
