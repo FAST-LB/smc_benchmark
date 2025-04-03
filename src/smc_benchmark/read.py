@@ -48,10 +48,10 @@ CONFIG_TO_NUMBER_KIT = {
 }
 
 CONFIG_TO_NUMBER_JKU = {
-    CONFIG1: [1, 2, 3, 4, 5, 6],
-    CONFIG2: [7, 8, 9, 10, 11, 12],
-    CONFIG5: [25, 26, 27, 28, 29, 30],
-    CONFIG6: [31, 32, 33, 34, 35, 36],
+    CONFIG1: [3, 7, 11, 15, 19, 23],
+    CONFIG2: [4, 8, 12, 16, 20, 24],
+    CONFIG5: [2, 6, 10, 14, 18, 22],
+    CONFIG6: [1, 5, 9, 13, 17, 21],
 }
 
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
