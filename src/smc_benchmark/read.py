@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from smc_benchmark._naming import (
+    DISPLACEMENT,
     ECN_NAMING,
     FORCE,
     GAP,
@@ -139,7 +140,9 @@ def _read_kit(file):
 
 def _read_utw(file):
     """Read UT/TPRC data file."""
-    return pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=6, quotechar='"')
+    data = pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=6, quotechar='"')
+    data[DISPLACEMENT] = -data[DISPLACEMENT][0] + data[DISPLACEMENT]
+    return data
 
 
 def _read_kul(file):
@@ -160,6 +163,9 @@ def _read_tum(file):
     """Read TUM data file."""
     data = pd.read_csv(file, sep=";", names=TUM_NAMING, skiprows=1, encoding="latin1", decimal=",")
     data[GAP] *= -1
+    data[GAP] = data[GAP] - 0.05  # adjust gap
+    data = data[data[GAP] <= 11.0].reset_index(drop=True)  # only consider gap <= 11 mm
+    data[DISPLACEMENT] -= data[DISPLACEMENT][0]  # adjust displacement
     return data
 
 
@@ -167,7 +173,9 @@ def _read_uob(file):
     """Read UOB data file."""
     data = pd.read_csv(file, sep=",", names=UOB_NAMING, skiprows=1, encoding="latin1", decimal=".")
     data[FORCE] *= -1_000
-    data[GAP] *= -1
+    data[GAP] += 11.0
+    data = data[data[GAP] <= 11.0].reset_index(drop=True)  # only consider gap <= 11 mm
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
 
 
@@ -175,12 +183,15 @@ def _read_wmg(file):
     """Read WMG data file."""
     data = pd.read_csv(file, sep=",", names=WMG_NAMING, skiprows=1, encoding="latin1", decimal=".")
     data[FORCE] *= -1_000.0  # [kN] to [N]
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
 
 
 def _read_ecn(file):
     """Read ECN data file."""
     data = pd.read_csv(file, sep=";", names=ECN_NAMING, skiprows=3, encoding="latin1", decimal=".")
+    data = data.loc[data[GAP] <= 11].reset_index(drop=True)
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
 
 
@@ -188,4 +199,7 @@ def _read_rise(file):
     """Read RISE data file."""
     data = pd.read_csv(file, sep=";", names=RISE_NAMING, skiprows=2, encoding="latin1", decimal=",")
     data[FORCE] *= -1_000.0  # [kN] to [N]
+    data[GAP] = 41.10 + (data[DISPLACEMENT] - data[DISPLACEMENT].iloc[0])
+    data = data[data[GAP] <= 11].reset_index(drop=True)
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
