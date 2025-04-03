@@ -1,9 +1,22 @@
+"""Read test data from different institutions."""
+
 import pathlib as pl
 
 import numpy as np
 import pandas as pd
 
-from smc_benchmark._naming import KIT_NAMING, KUL_NAMING, UTW_NAMING
+from smc_benchmark._naming import (
+    ECN_NAMING,
+    FORCE,
+    GAP,
+    KIT_NAMING,
+    KUL_NAMING,
+    RISE_NAMING,
+    TUM_NAMING,
+    UOB_NAMING,
+    UTW_NAMING,
+    WMG_NAMING,
+)
 from smc_benchmark._utils import decode_filename
 
 # Test configuirations
@@ -16,6 +29,12 @@ CONFIG4 = "7mm 100x100"
 KIT = "kit"
 UTW = "utw"
 KUL = "kul"
+ECN = "ecn"
+RISE = "rise"
+TUM = "tum"
+UOB = "uob"
+WMG = "wmg"
+JKU = "jku"
 
 # Mapping between configuration and number for KIT, UT
 CONFIG_TO_NUMBER_KIT = {
@@ -27,7 +46,17 @@ CONFIG_TO_NUMBER_KIT = {
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 
 # File extensions of the data files
-FILE_EXTENSION = {KIT: "*.TXT", UTW: "*.csv", KUL: "*.csv"}
+FILE_EXTENSION = {
+    KIT: "*.TXT",
+    UTW: "*.csv",
+    KUL: "*.csv",
+    ECN: "*.csv",
+    RISE: "*.csv",
+    TUM: "*.csv",
+    UOB: "*.csv",
+    WMG: "*.csv",
+    JKU: "*.csv",
+}
 
 
 def read(institution, folder):
@@ -61,6 +90,16 @@ def read(institution, folder):
             pd_data = _read_utw(file)
         elif institution == KUL:
             pd_data = _read_kul(file)
+        elif institution == ECN:
+            pd_data = _read_ecn(file)
+        elif institution == RISE:
+            pd_data = _read_rise(file)
+        elif institution == TUM:
+            pd_data = _read_tum(file)
+        elif institution == UOB:
+            pd_data = _read_uob(file)
+        elif institution == WMG:
+            pd_data = _read_wmg(file)
         else:
             raise ValueError(f"Insitution '{institution}' not found")
 
@@ -88,9 +127,40 @@ def _read_utw(file):
 def _read_kul(file):
     """Read KUL data file."""
     data = pd.read_csv(file, sep=";", names=KUL_NAMING, skiprows=5, quotechar='"', decimal=",")
-    data["F"] *= 1_000  # Convert kN to N
+    data[FORCE] *= 1_000  # Convert kN to N
     return data
 
 
-def _read_tum():
-    pass
+def _read_tum(file):
+    """Read TUM data file."""
+    data = pd.read_csv(file, sep=";", names=TUM_NAMING, skiprows=1, encoding="latin1", decimal=",")
+    data[GAP] *= -1
+    return data
+
+
+def _read_uob(file):
+    """Read UOB data file."""
+    data = pd.read_csv(file, sep=",", names=UOB_NAMING, skiprows=1, encoding="latin1", decimal=".")
+    data[FORCE] *= -1_000
+    data[GAP] *= -1
+    return data
+
+
+def _read_wmg(file):
+    """Read WMG data file."""
+    data = pd.read_csv(file, sep=",", names=WMG_NAMING, skiprows=1, encoding="latin1", decimal=".")
+    data[FORCE] *= -1_000.0  # [kN] to [N]
+    return data
+
+
+def _read_ecn(file):
+    """Read ECN data file."""
+    data = pd.read_csv(file, sep=";", names=ECN_NAMING, skiprows=3, encoding="latin1", decimal=".")
+    return data
+
+
+def _read_rise(file):
+    """Read RISE data file."""
+    data = pd.read_csv(file, sep=";", names=RISE_NAMING, skiprows=2, encoding="latin1", decimal=",")
+    data[FORCE] *= -1_000.0  # [kN] to [N]
+    return data
