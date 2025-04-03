@@ -160,6 +160,9 @@ def _read_tum(file):
     """Read TUM data file."""
     data = pd.read_csv(file, sep=";", names=TUM_NAMING, skiprows=1, encoding="latin1", decimal=",")
     data[GAP] *= -1
+    data = data.loc[data[GAP] <= 11.05]
+    data[GAP] = data[GAP] - 0.05
+    data = data.loc[:data[GAP].idxmin()]
     return data
 
 
@@ -167,7 +170,9 @@ def _read_uob(file):
     """Read UOB data file."""
     data = pd.read_csv(file, sep=",", names=UOB_NAMING, skiprows=1, encoding="latin1", decimal=".")
     data[FORCE] *= -1_000
-    data[GAP] *= -1
+    """data[GAP] *= -1"""
+    data[GAP] = data[GAP]+19
+    data = data.loc[:data[GAP].idxmin()]
     return data
 
 
@@ -181,6 +186,7 @@ def _read_wmg(file):
 def _read_ecn(file):
     """Read ECN data file."""
     data = pd.read_csv(file, sep=";", names=ECN_NAMING, skiprows=3, encoding="latin1", decimal=".")
+    data = data.loc[data[GAP] <= 11]
     return data
 
 
@@ -188,4 +194,7 @@ def _read_rise(file):
     """Read RISE data file."""
     data = pd.read_csv(file, sep=";", names=RISE_NAMING, skiprows=2, encoding="latin1", decimal=",")
     data[FORCE] *= -1_000.0  # [kN] to [N]
+    data[GAP] = 41.10 + (data[GAP] - data[GAP].iloc[0])
+    data = data.loc[data[GAP] <= 11]
+    data = data.loc[:data[GAP].idxmin()]
     return data
