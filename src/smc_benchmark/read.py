@@ -78,7 +78,7 @@ def read(institution, folder):
     Parameters
     ----------
     institution : str
-        Abbrevation of institution where the data was collected, e.g., 'kit' or 'ut'.
+        Abbrevation of institution where the data was collected, e.g., 'kit' or 'utw'.
     folder : str | pathlib.Path
         Path to the folder containing the data.
 
@@ -141,7 +141,8 @@ def _read_kit(file):
 def _read_utw(file):
     """Read UT/TPRC data file."""
     data = pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=6, quotechar='"')
-    data[DISPLACEMENT] = -data[DISPLACEMENT][0] + data[DISPLACEMENT]
+    data[GAP] = -data[GAP]
+    data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
 
 
