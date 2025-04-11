@@ -129,10 +129,15 @@ def read(institution, folder):
         if material not in all_data:
             all_data[material] = {}
         # Determine the specification based on the institution
-        if institution == JKU:
-            specification = NUMBER_TO_CONFIG_JKU[int(number)]
-        else:
-            specification = NUMBER_TO_CONFIG_KIT[int(number)]
+        try:
+            if institution == JKU:
+                specification = NUMBER_TO_CONFIG_JKU[int(number)]
+            elif institution == UOB:
+                specification = NUMBER_TO_CONFIG_UOB[int(number)]
+            else:
+                specification = NUMBER_TO_CONFIG_KIT[int(number)]
+        except KeyError:
+            print(f'Material {material} file number {int(number)} is not in CONFIG_TO_NUMBER_')
         if specification not in all_data[material]:
             all_data[material][specification] = []
         all_data[material][specification].append(pd_data)
