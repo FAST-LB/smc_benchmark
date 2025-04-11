@@ -55,8 +55,15 @@ CONFIG_TO_NUMBER_JKU = {
     CONFIG6: [1, 5, 9, 13, 17, 21],
 }
 
+#all short shots, 50x50 only
+CONFIG_TO_NUMBER_UOB = {
+    CONFIG6: [1, 5, 9, 13, 17, 21], #7 short shot
+    CONFIG5: [2, 6, 10, 14, 18, 22], #5 short shot
+    CONFIG2: [3, 7, 11, 15, 19, 23], #3 short shot
+
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 NUMBER_TO_CONFIG_JKU = {v: k for k, values in CONFIG_TO_NUMBER_JKU.items() for v in values}
+NUMBER_TO_CONFIG_UOB = {v: k for k, values in CONFIG_TO_NUMBER_UOB.items() for v in values}
 
 # File extensions of the data files
 FILE_EXTENSION = {
