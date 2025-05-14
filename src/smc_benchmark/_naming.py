@@ -47,3 +47,4 @@ WMG_NAMING = [
     "Pressure 4-5832804",
     "Pressure 5-5832805",
 ]
+IVW_NAMING = [TIME, GAP, FORCE]

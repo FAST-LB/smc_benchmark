@@ -18,6 +18,7 @@ from smc_benchmark._naming import (
     UOB_NAMING,
     UTW_NAMING,
     WMG_NAMING,
+    IVW_NAMING
 )
 from smc_benchmark._utils import decode_filename
 
@@ -39,8 +40,9 @@ TUM = "tum"
 UOB = "uob"
 WMG = "wmg"
 JKU = "jku"
+IVW = "ivw"
 
-# Mapping between configuration and number for KIT, UT, KUL
+# Mapping between configuration and number for KIT, UT, KUL, IVW
 CONFIG_TO_NUMBER_KIT = {
     CONFIG1: [3, 7, 11, 15, 19, 23],
     CONFIG2: [4, 8, 12, 16, 20, 24],
@@ -76,6 +78,7 @@ FILE_EXTENSION = {
     UOB: "*.csv",
     WMG: "*.csv",
     JKU: "*.csv",
+    IVW: "*.csv"
 }
 
 
@@ -122,6 +125,8 @@ def read(institution, folder):
             pd_data = _read_uob(file)
         elif institution == WMG:
             pd_data = _read_wmg(file)
+        elif institution == IVW:
+            pd_data = _read_ivw(file)
         else:
             raise ValueError(f"Insitution '{institution}' not found")
 
@@ -216,4 +221,11 @@ def _read_rise(file):
     data[GAP] = 41.10 + (data[DISPLACEMENT] - data[DISPLACEMENT].iloc[0])
     data = data[data[GAP] <= 11].reset_index(drop=True)
     data[DISPLACEMENT] = data[GAP][0] - data[GAP]
+    return data
+
+
+def _read_ivw(file):
+    """Read IVW data file."""
+    data = pd.read_csv(file, sep=";", names=IVW_NAMING, skiprows=4, quotechar='"')
+    data[FORCE] *= 1_000  # Convert kN to N
     return data
