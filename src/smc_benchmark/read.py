@@ -162,6 +162,7 @@ def _read_kul(file):
     """Read KUL data file."""
     data = pd.read_csv(file, sep=";", names=KUL_NAMING, skiprows=5, quotechar='"', decimal=",")
     data[FORCE] *= 1_000  # Convert kN to N
+    data[GAP] = 11.0 - data[DISPLACEMENT]
     return data
 
 
