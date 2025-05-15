@@ -36,14 +36,5 @@ UOB_NAMING = [
     GAP,
     FORCE,
 ]
-WMG_NAMING = [
-    TIME,
-    GAP,
-    "LVDT - Cavity Height",
-    FORCE,
-    "Pressure 1-5816604",
-    "Pressure 2-5816605",
-    "Pressure 3-5816606",
-    "Pressure 4-5832804",
-    "Pressure 5-5832805",
-]
+WMG_NAMING = [TIME, DISPLACEMENT, GAP, "F0", "P1", "P2", "P3", "P4", "P5", "F1","FD", FORCE]
+IVW_NAMING = [TIME, GAP, FORCE]
