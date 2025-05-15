@@ -201,7 +201,7 @@ def _read_uob(file):
 def _read_wmg(file):
     """Read WMG data file."""
     data = pd.read_csv(file, sep=",", names=WMG_NAMING, skiprows=1, encoding="latin1", decimal=".")
-    data[FORCE] *= -1_000.0  # [kN] to [N]
+    data[FORCE] *= 1_000.0  # [kN] to [N]
     data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
 
