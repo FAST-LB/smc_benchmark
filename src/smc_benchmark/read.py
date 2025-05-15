@@ -10,6 +10,7 @@ from smc_benchmark._naming import (
     ECN_NAMING,
     FORCE,
     GAP,
+    IVW_NAMING,
     JKU_NAMING,
     KIT_NAMING,
     KUL_NAMING,
@@ -18,7 +19,6 @@ from smc_benchmark._naming import (
     UOB_NAMING,
     UTW_NAMING,
     WMG_NAMING,
-    IVW_NAMING
 )
 from smc_benchmark._utils import decode_filename
 
