@@ -35,7 +35,7 @@ min_gap_map = {"7mm": 7.0, "5mm": 5.0, "3mm": 3.0}
 min_gap_wildcard = 3.0  # [mm]
 
 # What to plot? (Both can be set to True at the same time))
-plot_samples = True  # plot individual experiments
+plot_samples = False  # plot individual experiments
 plot_mean_std = True  # plot mean and std of the specification
 
 # Plot
@@ -83,7 +83,7 @@ for material, configs in data.items():
             handles.append(handle_samples)
             labels.append("Samples")
             ax.legend(handles, labels)
-        elif plot_samples:
+        elif plot_mean_std:
             ax.legend()
 
         ax.set_title(f"{material} {config}")
