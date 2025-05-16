@@ -82,7 +82,7 @@ FILE_EXTENSION = {
 }
 
 
-def read(institution, folder):
+def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
     """Read test data.
 
     Parameters
@@ -91,6 +91,10 @@ def read(institution, folder):
         Abbrevation of institution where the data was collected, e.g., 'kit' or 'utw'.
     folder : str | pathlib.Path
         Path to the folder containing the data.
+    mat_of_interest : str | None
+        Material of interest, e.g., 'CF5050K'. If None, all materials are read.
+    spec_of_interest : str | None
+        Specification of interest, e.g., '3mm 100x100'. If None, all specifications are read.
 
     Returns
     -------
@@ -105,9 +109,29 @@ def read(institution, folder):
     # Read data
     all_data = {}
     files = list(folder.glob(FILE_EXTENSION[institution]))  # Generator in Liste umwandeln
-    print(f"📁 Number of data for {institution}: {len(files)}")
+    print(f"📁 Total number of {institution} data files: {len(files)}")
+    n_files_read = 0
     for file in folder.glob(FILE_EXTENSION[institution]):
         _, material, number = decode_filename(file.stem)
+
+        # Determine the specification based on the institution
+        try:
+            if institution == JKU:
+                specification = NUMBER_TO_CONFIG_JKU[int(number)]
+            elif institution == UOB:
+                specification = NUMBER_TO_CONFIG_UOB[int(number)]
+            else:
+                specification = NUMBER_TO_CONFIG_KIT[int(number)]
+        except KeyError:
+            print(f"Material {material} file number {int(number)} is not in CONFIG_TO_NUMBER_")
+
+        # Skip materials that are not of interest
+        if mat_of_interest:
+            if material != mat_of_interest:
+                continue
+        if spec_of_interest:
+            if spec_of_interest != specification:
+                continue
 
         # Read individual experiments
         if institution == KIT:
@@ -136,19 +160,13 @@ def read(institution, folder):
         # Add experiment to all data
         if material not in all_data:
             all_data[material] = {}
-        # Determine the specification based on the institution
-        try:
-            if institution == JKU:
-                specification = NUMBER_TO_CONFIG_JKU[int(number)]
-            elif institution == UOB:
-                specification = NUMBER_TO_CONFIG_UOB[int(number)]
-            else:
-                specification = NUMBER_TO_CONFIG_KIT[int(number)]
-        except KeyError:
-            print(f"Material {material} file number {int(number)} is not in CONFIG_TO_NUMBER_")
+
+        # Add specification to all data
         if specification not in all_data[material]:
             all_data[material][specification] = []
         all_data[material][specification].append(pd_data)
+        n_files_read += 1
+    print(f"... loaded {n_files_read} {institution} data files.")
     return all_data
 
 
