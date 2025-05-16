@@ -20,7 +20,7 @@ classifiers = [
   "Topic :: Scientific/Engineering",
 ]
 requires-python = ">=3.9"
-dependencies = ["numpy", "pandas", "matplotlib"]
+dependencies = ["numpy", "pandas", "scipy", "matplotlib"]
 
 [tool.distutils.bdist_wheel]
 universal = true
