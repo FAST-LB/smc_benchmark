@@ -78,7 +78,7 @@ FILE_EXTENSION = {
     UOB: "*.csv",
     WMG: "*.csv",
     JKU: "*.csv",
-    IVW: "*.csv"
+    IVW: "*.csv",
 }
 
 
@@ -98,11 +98,14 @@ def read(institution, folder):
         Dictionary containing the experimental data.
     """
     folder = pl.Path(folder)
+    print(folder)
     if not folder.exists():
         raise FileNotFoundError(f"Folder not found: {folder}")
 
     # Read data
     all_data = {}
+    files = list(folder.glob(FILE_EXTENSION[institution]))  # Generator in Liste umwandeln
+    print(f"📁 Number of data for {institution}: {len(files)}")
     for file in folder.glob(FILE_EXTENSION[institution]):
         _, material, number = decode_filename(file.stem)
 
@@ -226,6 +229,8 @@ def _read_rise(file):
 
 def _read_ivw(file):
     """Read IVW data file."""
-    data = pd.read_csv(file, sep=";", names=IVW_NAMING, skiprows=4, quotechar='"')
+    data = pd.read_csv(
+        file, sep=";", names=IVW_NAMING, skiprows=4, quotechar='"', skipfooter=1, engine="python"
+    )
     data[FORCE] *= 1_000  # Convert kN to N
     return data
