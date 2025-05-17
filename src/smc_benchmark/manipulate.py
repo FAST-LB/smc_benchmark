@@ -41,11 +41,15 @@ def mean_std(data, x_col=GAP, y_col=FORCE):
     ----------
     data : list[pd.DataFrame]
         Data to calculate mean and std.
+    x_col : str, optional
+        Column to use for x-axis, by default 'h'.
+    y_col : str, optional
+        Column to use for y-axis, by default 'F'.
 
     Returns
     -------
     tuple
-        Mean and std of the data.
+        Tuple of x-axis values, mean and std.
     """
     x_min, x_max = data[0][x_col].min(), data[0][x_col].max()
     for df in data:
