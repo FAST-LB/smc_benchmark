@@ -53,8 +53,9 @@ def mean_std(data, x_col=GAP, y_col=FORCE):
         x_max = min(x_max, df[x_col].max())
     if x_col == GAP:
         dx = 0.05
-        x_interp = np.arange(0.0, 100.0, dx)
-        x_interp = x_interp[(x_interp >= x_min) & (x_interp <= x_max)]
+        start = np.ceil(x_min / dx)
+        end = np.floor(x_max / dx)
+        x_interp = np.arange(start, end + 1) * dx
     else:
         x_interp = np.linspace(x_min, x_max, 250)
 
