@@ -178,7 +178,7 @@ def _read_kit(file):
 
 def _read_utw(file):
     """Read UT/TPRC data file."""
-    data = pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=6, quotechar='"')
+    data = pd.read_csv(file, sep=",", names=UTW_NAMING, skiprows=7, quotechar='"')
     data[GAP] = -data[GAP]
     data[DISPLACEMENT] = data[GAP][0] - data[GAP]
     return data
