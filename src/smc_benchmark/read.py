@@ -124,6 +124,7 @@ def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
                 specification = NUMBER_TO_CONFIG_KIT[int(number)]
         except KeyError:
             print(f"Material {material} file number {int(number)} is not in CONFIG_TO_NUMBER_")
+            continue
 
         # Skip materials that are not of interest
         if mat_of_interest:
