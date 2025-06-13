@@ -56,6 +56,13 @@ CONFIG_TO_NUMBER_JKU = {
     CONFIG6: [1, 5, 9, 13, 17, 21],
 }
 
+CONFIG_TO_NUMBER_RISE = {
+    CONFIG6: [1, 5, 9, 13, 17, 21],
+    CONFIG2: [3, 7, 11, 15, 19, 23],
+    CONFIG1: [4, 8, 12, 16, 20, 24],
+    CONFIG5: [2, 6, 10, 14, 22, 18],
+}
+
 # all short shots, 50x50 only
 CONFIG_TO_NUMBER_UOB = {
     CONFIG6: [1, 5, 9, 13, 17, 21],  # 7 short shot
@@ -65,6 +72,7 @@ CONFIG_TO_NUMBER_UOB = {
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 NUMBER_TO_CONFIG_JKU = {v: k for k, values in CONFIG_TO_NUMBER_JKU.items() for v in values}
 NUMBER_TO_CONFIG_UOB = {v: k for k, values in CONFIG_TO_NUMBER_UOB.items() for v in values}
+NUMBER_TO_CONFIG_RISE = {v: k for k, values in CONFIG_TO_NUMBER)RISE.items() for v in values}
 
 # File extensions of the data files
 FILE_EXTENSION = {
@@ -119,6 +127,8 @@ def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
                 specification = NUMBER_TO_CONFIG_JKU[int(number)]
             elif institution == UOB:
                 specification = NUMBER_TO_CONFIG_UOB[int(number)]
+            elif institution == RISE:
+                specification = NUMBER_TO_CONFIG_RISE[int(number)]
             else:
                 specification = NUMBER_TO_CONFIG_KIT[int(number)]
         except KeyError:
