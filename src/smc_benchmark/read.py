@@ -51,8 +51,7 @@ CONFIG_TO_NUMBER_KIT = {
 }
 
 CONFIG_TO_NUMBER_JKU = {
-    CONFIG1: [3, 7, 11, 15, 19, 23],
-    CONFIG2: [4, 8, 12, 16, 20, 24],
+    CONFIG2: [3, 7, 11, 15, 19, 23],
     CONFIG5: [2, 6, 10, 14, 18, 22],
     CONFIG6: [1, 5, 9, 13, 17, 21],
 }
