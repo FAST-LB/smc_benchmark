@@ -51,6 +51,7 @@ CONFIG_TO_NUMBER_KIT = {
 }
 
 CONFIG_TO_NUMBER_JKU = {
+    CONFIG1: [4, 8, 12, 16, 20, 24],
     CONFIG2: [3, 7, 11, 15, 19, 23],
     CONFIG5: [2, 6, 10, 14, 18, 22],
     CONFIG6: [1, 5, 9, 13, 17, 21],
@@ -62,9 +63,26 @@ CONFIG_TO_NUMBER_UOB = {
     CONFIG5: [2, 6, 10, 14, 18, 22],  # 5 short shot
     CONFIG2: [3, 7, 11, 15, 19, 23],  # 3 short shot
 }
+
+CONFIG_TO_NUMBER_RISE = {
+    # CONFIG1: [4, 8, 12, 16, 20, 24],  # circular samples, not considered here
+    CONFIG2: [3, 7, 11, 15, 19, 23],
+    CONFIG5: [2, 6, 10, 14, 18, 22],
+    CONFIG6: [1, 5, 9, 13, 17, 21],
+}
+
+CONFIG_TO_NUMBER_TUM = {
+    CONFIG1: [3, 7, 11, 15, 19, 20, 23],  # Additional sample here
+    CONFIG2: [4, 8, 12, 16, 24],  # One sample lacking
+    CONFIG3: [2, 6, 10, 14, 18, 22],
+    CONFIG4: [1, 5, 9, 13, 17, 21],
+}
+
 NUMBER_TO_CONFIG_KIT = {v: k for k, values in CONFIG_TO_NUMBER_KIT.items() for v in values}
 NUMBER_TO_CONFIG_JKU = {v: k for k, values in CONFIG_TO_NUMBER_JKU.items() for v in values}
 NUMBER_TO_CONFIG_UOB = {v: k for k, values in CONFIG_TO_NUMBER_UOB.items() for v in values}
+NUMBER_TO_CONFIG_RISE = {v: k for k, values in CONFIG_TO_NUMBER_RISE.items() for v in values}
+NUMBER_TO_CONFIG_TUM = {v: k for k, values in CONFIG_TO_NUMBER_TUM.items() for v in values}
 
 # File extensions of the data files
 FILE_EXTENSION = {
@@ -119,6 +137,10 @@ def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
                 specification = NUMBER_TO_CONFIG_JKU[int(number)]
             elif institution == UOB:
                 specification = NUMBER_TO_CONFIG_UOB[int(number)]
+            elif institution == RISE:
+                specification = NUMBER_TO_CONFIG_RISE[int(number)]
+            elif institution == TUM:
+                specification = NUMBER_TO_CONFIG_TUM[int(number)]
             else:
                 specification = NUMBER_TO_CONFIG_KIT[int(number)]
         except KeyError:
