@@ -132,7 +132,7 @@ def read(
 
     Returns
     -------
-    dict[str, dict[str, dict[pd.DataFrame]]]
+    dict[str, dict[str, dict[int, pd.DataFrame]]]
         Dictionary containing the experimental data.
     """
     folder = pl.Path(folder)
