@@ -99,7 +99,14 @@ FILE_EXTENSION = {
 }
 
 
-def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
+def read(
+    institution,
+    folder,
+    mat_of_interest=None,
+    spec_of_interest=None,
+    skip_erroneous_files=True,
+    verbose=True,
+):
     """Read test data.
 
     Parameters
@@ -112,23 +119,44 @@ def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
         Material of interest, e.g., 'CF5050K'. If None, all materials are read.
     spec_of_interest : str | None
         Specification of interest, e.g., '3mm 100x100'. If None, all specifications are read.
+    skip_erroneous_files : bool
+        If True, skip files listed in error.log located in the folder.
+        Error log format: one erroneous filename per line, followed by a colon and the error
+        message. An exemplary error log ::
+
+            sample1.csv: Error message
+            sample2.csv: Another error message
+
+    verbose : bool
+        If True, print information about the reading process.
 
     Returns
     -------
-    dict[str, dict[str, list[pd.DataFrame]]]
+    dict[str, dict[str, dict[int, pd.DataFrame]]]
         Dictionary containing the experimental data.
     """
     folder = pl.Path(folder)
-    print(folder)
     if not folder.exists():
         raise FileNotFoundError(f"Folder not found: {folder}")
+
+    # Check for errorneous files
+    error_log_file = folder / "error.log"
+    if skip_erroneous_files and error_log_file.exists():
+        erroneous_files = _read_error_log(error_log_file)
+    else:
+        erroneous_files = []
 
     # Read data
     all_data = {}
     files = list(folder.glob(FILE_EXTENSION[institution]))  # Generator in Liste umwandeln
-    print(f"📁 Total number of {institution} data files: {len(files)}")
+    if verbose:
+        print(f"📁 Total number of {institution} data files: {len(files)}")
     n_files_read = 0
     for file in folder.glob(FILE_EXTENSION[institution]):
+        if file.name.lower() in erroneous_files:
+            if verbose:
+                print(f"Skipping erroneous file: {file.name}")
+            continue
         _, material, number = decode_filename(file.stem)
 
         # Determine the specification based on the institution
@@ -185,10 +213,11 @@ def read(institution, folder, mat_of_interest=None, spec_of_interest=None):
 
         # Add specification to all data
         if specification not in all_data[material]:
-            all_data[material][specification] = []
-        all_data[material][specification].append(pd_data)
+            all_data[material][specification] = {}
+        all_data[material][specification][int(number)] = pd_data
         n_files_read += 1
-    print(f"... loaded {n_files_read} {institution} data files.")
+    if verbose:
+        print(f"... loaded {n_files_read} {institution} data files.")
     return all_data
 
 
@@ -274,3 +303,42 @@ def _read_ivw(file):
     )
     data[FORCE] *= 1_000  # Convert kN to N
     return data
+
+
+def _read_error_log(file):
+    """Read error log and return a list of erroneous files (lowercase)."""
+    erroneous_files = []
+
+    try:
+        with file.open("r") as f:
+            lines = f.readlines()
+    except (OSError, UnicodeDecodeError) as e:
+        print(f"Warning: Could not read error log {file.as_posix()}: {e}")
+        return erroneous_files
+
+    for line_num, line in enumerate(lines, start=1):
+        # Check formatting
+        if ":" not in line:
+            print(
+                f"Warning: Malformed line {line_num} in error log {file.as_posix()}: "
+                f"'{line.strip()}'"
+            )
+            continue
+
+        # Extract filename
+        try:
+            filename = line.split(":")[0].strip()
+            if filename:
+                erroneous_files.append(filename.lower())
+            else:
+                print(
+                    f"Warning: Line {line_num} in error log {file.as_posix()} has empty filename: "
+                    f"{line}"
+                )
+        except Exception as e:
+            print(
+                f"Warning: Could not parse line {line_num} in error log {file.as_posix()}: "
+                f"{line} - {e}"
+            )
+            continue
+    return erroneous_files

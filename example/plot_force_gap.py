@@ -18,9 +18,7 @@ folder = pl.Path("Path/to/data")
 # - all data
 data = read(institution, folder)
 # - specific material and/or specification
-# data = read(
-#     institution, folder, mat_of_interest="CF5050K", spec_of_interest="7mm 100x100"
-# )
+# data = read(institution, folder, mat_of_interest="CF5050K", spec_of_interest="3mm 100x100")
 
 # Log the loaded data to the console
 print_data_structure(data)
@@ -42,7 +40,7 @@ plot_mean_std = True  # plot mean and std of the specification
 for material, configs in data.items():
     for config, experiments in configs.items():
         min_gap = next((v for k, v in min_gap_map.items() if k in config), min_gap_wildcard)
-        experiments_cropped = crop_to_range(experiments, min_gap, max_gap, x_name, True)
+        experiments_cropped = crop_to_range(experiments.values(), min_gap, max_gap, x_name, True)
         # Initialize figure
         fig, ax = plt.subplots(1, 1)
 

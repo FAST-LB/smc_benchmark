@@ -41,10 +41,11 @@ def test_read_institution(institution, file):
     for exp, spec_dict in data.items():
         assert isinstance(exp, str)
         assert isinstance(spec_dict, dict)
-        for name, values in spec_dict.items():
+        for name, experiments in spec_dict.items():
             assert isinstance(name, str)
-            assert isinstance(values, list)
-            assert all(isinstance(p, pd.DataFrame) for p in values)
+            for id_i, df_i in experiments.items():
+                assert isinstance(id_i, int)
+                assert isinstance(df_i, pd.DataFrame)
 
 
 @pt.mark.parametrize("institution, file", testdata)
@@ -62,8 +63,8 @@ def test_plotting(institution, file, dir_results):
     # Plot all configurations
     for material, configs in data.items():
         for config, experiments in configs.items():
-            fig, ax = plt.subplots(1, 1)
-            for experiment in experiments:
+            _, ax = plt.subplots(1, 1)
+            for experiment in experiments.values():
                 ax.plot(experiment[DISPLACEMENT], experiment[FORCE])
             ax.set_xlabel("Displacement in mm")
             ax.set_ylabel("Force in N")

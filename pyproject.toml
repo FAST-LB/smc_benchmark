@@ -25,9 +25,6 @@ dependencies = ["numpy", "pandas", "scipy", "matplotlib"]
 [tool.distutils.bdist_wheel]
 universal = true
 
-[tool.black]
-line-length = 100
-
 [tool.ruff]
 line-length = 100
 lint.extend-select = [
@@ -48,10 +45,7 @@ lint.extend-select = [
   "NPY", # NumPy
   "RUF", # Ruff
 ]
-lint.ignore = ["PD901"]  # ignore generic name `df` for DataFrame
-
-[tool.isort]
-profile = "black"
+lint.ignore = ["PD901"] # ignore generic name `df` for DataFrame
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
